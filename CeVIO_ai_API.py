@@ -1,5 +1,7 @@
 #!python3.8
 
+from re import split as sp
+
 import win32com.client
 
 
@@ -31,9 +33,7 @@ class CeVIOai:
         self.__talker = win32com.client.Dispatch("CeVIO.Talk.RemoteService2.Talker2")
 
         #話し手取得
-        if CeVIOai.__talker_name:
-            pass
-        else:
+        if not CeVIOai.__talker_name:
             self.get_talker()
 
         #初期設定
@@ -48,7 +48,7 @@ class CeVIOai:
         """
         return self.__talker.OutputWaveToFile(text,path)
 
-    def speak(self,text:str, wait_time:float = -1):
+    def speak(self,text:list, wait_time:float = -1):
         """
         読み上げを開始
         Parameters
@@ -58,15 +58,50 @@ class CeVIOai:
         wait_time:
             再生終了までの最大待機時間
         """
-        status = self.__talker.Speak(text)
-        status.Wait_2(wait_time)
-        return status.IsSucceeded
+        return_text = []
+        for speak, in text:
+            status = self.__talker.Speak(speak)
+            status.Wait_2(wait_time)
+            return_text.append(status.IsSucceeded)
+        return return_text
 
     def stop(self):
         """
         読み上げの停止
         """
         return self.__talker.Stop()
+
+
+    def split_speak_text(self,text:str,
+                        pattern:str =r"\s|\_|\\|\(|\)|\"|\'|\.|\,|、|。") -> list:
+        return_text = []
+        temp = sp(pattern, text)
+        for i in temp:
+            if len(i) == 200:
+                raise ValueError("切り分けられませんでした")
+            elif len(i) == 0:
+                continue
+            return_text.append(i)
+        return return_text
+
+
+
+    def reset_emotion(self, skip:list = []):
+        """
+        感情値を初期化
+        すべての感情値を0にします
+
+        Parametars
+        ----------
+        skip:
+            操作しない感情
+        """
+        for i in self.get_select_emotion(self.get_cast()):
+                if i in skip:
+                    continue
+                self.__talker.Components.ByName(i).Value = 0
+        return "正常に変更されました"
+
 
     def change_emotion(self, value:dict, mode:bool = True):
         """
@@ -89,32 +124,14 @@ class CeVIOai:
                 raise NameError(f"{i}は存在しません")
         #他の感情値を0に
         if mode == True:
-            for i in self.get_select_emotion(self.get_cast()):
-                if i in temp:
-                    continue
-                self.__talker.Components.ByName(i).Value = 0
-            return "正常に変更されました"
+            return self.reset_emotion(temp)
 
-
-    def reset_emotion(self, skip:list = []):
-        """
-        感情値を初期化
-        すべての感情値を0にします
-        Parametars
-        ----------
-        skip:
-            操作しない感情値
-        """
-        for i in self.get_select_emotion(self.get_cast()):
-                if i in skip:
-                    continue
-                self.__talker.Components.ByName(i).Value = 0
-        return "正常に変更されました"
 
     def set_emotion(self, value:str):
         """
         感情パラメータの変更
         選択した感情の値を100にし、他のパラメータを0にします
+
         Parameters
         ----------
         value:
@@ -126,10 +143,7 @@ class CeVIOai:
         else:
             raise NameError(f"{value}は存在しません")
         #他の感情値を0に
-        for i in self.get_select_emotion(self.get_cast()):
-            if i == value:
-                continue
-            self.__talker.Components.ByName(i).Value = 0
+        self.reset_emotion([value])
         return f"感情パラメーターを{value}に切り替えました"
 
 
