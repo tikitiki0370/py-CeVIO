@@ -93,19 +93,23 @@ class CeVIOai:
                 if i in temp:
                     continue
                 self.__talker.Components.ByName(i).Value = 0
-            else:
-                return "正常に変更されました"
+            return "正常に変更されました"
 
 
-    def reset_emotion(self, _pass:list):
-        if not _pass:
-            raise ValueError("値を指定してください")
+    def reset_emotion(self, skip:list = []):
+        """
+        感情値を初期化
+        すべての感情値を0にします
+        Parametars
+        ----------
+        skip:
+            操作しない感情値
+        """
         for i in self.get_select_emotion(self.get_cast()):
-                if i in _pass:
+                if i in skip:
                     continue
                 self.__talker.Components.ByName(i).Value = 0
-        else:
-            return "正常に変更されました"
+        return "正常に変更されました"
 
     def set_emotion(self, value:str):
         """
@@ -126,8 +130,7 @@ class CeVIOai:
             if i == value:
                 continue
             self.__talker.Components.ByName(i).Value = 0
-        else:
-            return f"感情パラメーターを{value}に切り替えました"
+        return f"感情パラメーターを{value}に切り替えました"
 
 
     def set_talker(self, name:str):
@@ -264,7 +267,8 @@ class CeVIOai:
 
 if __name__ == "__main__":
     test = CeVIOai()
-    print(test.get_emotion())
+    test.speak("こんにちは")
+    print(test.get_emotion_value())
     test.change_emotion({"嬉しい": 0,"落ち着き":0})
     print(test.get_emotion_value())
     print(test.speak("こんにちは"))
