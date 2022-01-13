@@ -4,6 +4,8 @@ from re import split as sp
 
 import win32com.client
 
+from tests import split_speak_text
+
 
 class StartupError(Exception):
     def __init__(self,number):
@@ -38,7 +40,6 @@ class CeVIOai:
 
         #初期設定
         self.__talker.Cast = CeVIOai.__talker_name[0]
-        self.__talker.Components.ByName(CeVIOai.__emotion[CeVIOai.__talker_name[0]][0]).Value = 100
         self.__talker.Volume = 50
 
 
@@ -58,8 +59,19 @@ class CeVIOai:
         wait_time:
             再生終了までの最大待機時間
         """
+        speak_text = []
         return_text = []
-        for speak, in text:
+
+        #list以外を変換
+        if type(text) != list:
+            speak_text.append(str(text))
+        else:
+            speak_text += text
+        #読み上げ
+        for speak in speak_text:
+            if len(speak) >= 200:
+                return_text += self.speak(split_speak_text(speak))
+                continue
             status = self.__talker.Speak(speak)
             status.Wait_2(wait_time)
             return_text.append(status.IsSucceeded)
@@ -73,7 +85,16 @@ class CeVIOai:
 
 
     def split_speak_text(self,text:str,
-                        pattern:str =r"\s|\_|\\|\(|\)|\"|\'|\.|\,|、|。") -> list:
+                        pattern:str =r"\s|\_|\\|\(|\)|\"|\'|\.|\,|、|。|「|」") -> list:
+        """
+        文章を切り分ける
+        Parametars
+        ----------
+        text:
+            切り分ける文
+        pattern:
+            区切り文字の正規表現
+        """
         return_text = []
         temp = sp(pattern, text)
         for i in temp:
@@ -85,18 +106,18 @@ class CeVIOai:
         return return_text
 
 
-
     def reset_emotion(self, skip:list = []):
         """
         感情値を初期化
-        すべての感情値を0にします
+        感情値を0にします
 
         Parametars
         ----------
         skip:
             操作しない感情
         """
-        for i in self.get_select_emotion(self.get_cast()):
+        emo_list = self.get_select_emotion(self.get_cast())
+        for i in emo_list:
                 if i in skip:
                     continue
                 self.__talker.Components.ByName(i).Value = 0
@@ -280,9 +301,14 @@ class CeVIOai:
 
 
 if __name__ == "__main__":
+    #引用(https://www.ah-soft.com/rikka/)
+    test_meg = """「CeVIO AI 小春六花 トークボイス」は、声優「青山吉能」の声を元に制作した、明るく元気な声が特徴で、喜怒哀楽の表現も可能な入力文字読み上げソフトです。
+最新のAI技術により人間の声質や癖、しゃべり方を高精度に再現します。
+あなたのお好みの文章や言葉をテキストで入力するだけで、簡単に読み上げさせることができます。
+また、他のCeVIO AI トークボイス製品をお持ちの場合、セリフ毎にキャスト(話者)を切り替えて対話のように喋らせることも可能です。"""
     test = CeVIOai()
-    test.speak("こんにちは")
     print(test.get_emotion_value())
+    print(test.speak(test_meg))
+
     test.change_emotion({"嬉しい": 0,"落ち着き":0})
     print(test.get_emotion_value())
-    print(test.speak("こんにちは"))
