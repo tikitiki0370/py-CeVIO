@@ -1,5 +1,3 @@
-#!python3.8
-
 from re import split as sp
 
 import win32com.client
