@@ -52,6 +52,7 @@ class CeVIOai:
     def speak(self,text:list, wait_time:float = -1):
         """
         読み上げを開始
+
         Parameters
         -----------
         text:
@@ -88,6 +89,7 @@ class CeVIOai:
                         pattern:str =r"\s|\_|\\|\(|\)|\"|\'|\.|\,|、|。|「|」") -> list:
         """
         文章を切り分ける
+
         Parametars
         ----------
         text:
