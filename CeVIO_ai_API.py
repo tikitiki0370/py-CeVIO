@@ -99,7 +99,7 @@ class CeVIOai:
         temp = sp(pattern, text)
         for i in temp:
             if len(i) == 200:
-                raise ValueError("切り分けられませんでした")
+                return "切り分けられませんでした"
             elif len(i) == 0:
                 continue
             return_text.append(i)
@@ -142,7 +142,7 @@ class CeVIOai:
             if i in  CeVIOai.__emotion[self.__talker.Cast]:
                 self.__talker.Components.ByName(i).Value = value[i]
             else:
-                raise NameError(f"{i}は存在しません")
+                return f"{i}は存在しません"
         #他の感情値を0に
         if mode == True:
             return self.reset_emotion(temp)
@@ -162,7 +162,7 @@ class CeVIOai:
         if value in  CeVIOai.__emotion[self.__talker.Cast]:
             self.__talker.Components.ByName(value).Value = 100
         else:
-            raise NameError(f"{value}は存在しません")
+            return f"{value}は存在しません"
         #他の感情値を0に
         self.reset_emotion([value])
         return f"感情パラメーターを{value}に切り替えました"
@@ -176,7 +176,7 @@ class CeVIOai:
             self.__talker.Cast = name
             self.__talker.Components.ByName(CeVIOai.__emotion[name][0]).name = 100
         else:
-            raise ValueError(f"{name}は存在しません")
+            return f"{name}は存在しません"
 
     def set_tone(self, value:int = 50):
         """
@@ -186,7 +186,7 @@ class CeVIOai:
             self.__talker.Tone = value 
             return f"{value}変更されました" if value == 50 else "リセットされました"
         else:
-            raise ValueError("値が不正です")
+            return "値が不正です"
 
     def set_speed(self, value:int = 50):
         """
@@ -196,7 +196,7 @@ class CeVIOai:
             self.__talker.Speed = value
             return f"{value}変更されました" if value == 50 else "リセットされました"
         else:
-            raise ValueError("値が不正です")
+            return "値が不正です"
 
     def set_tonescale(self, value:int = 50):
         """
@@ -206,7 +206,7 @@ class CeVIOai:
             self.__talker.ToneScale = value
             return f"{value}に変更されました" if value == 50 else "リセットされました"
         else:
-            raise ValueError("値が不正です")
+            return "値が不正です"
 
     def set_alpha(self, value:int = 50):
         """
@@ -216,7 +216,7 @@ class CeVIOai:
             self.__talker.Alpha = value
             return f"{value}変更されました" if value == 50 else "リセットされました"
         else:
-            raise ValueError("値が不正です")
+            return "値が不正です"
 
     def set_volume(self, value:int = 50):
         """
@@ -226,7 +226,7 @@ class CeVIOai:
             self.__talker.Volume = value
             return f"{value}変更されました" if value == 50 else "リセットされました"
         else:
-            raise ValueError("値が不正です")
+            return "値が不正です"
 
 
     def get_talker(self) -> None:
