@@ -333,5 +333,5 @@ class CeVIOai:
 if __name__ == "__main__":
     test_meg = "これはテストメッセージです"
     test = CeVIOai()
-    print(test.get_emotion)
+    print(test.get_emotion())
     print(test.speak(test_meg))
