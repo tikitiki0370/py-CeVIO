@@ -1,4 +1,8 @@
+from operator import imod
 from re import split as sp
+from os import remove
+
+import wave
 
 import win32com.client
 
@@ -49,6 +53,31 @@ class CeVIOai:
         return list_text
 
 
+    def wav_merge(self, status:list, path:str = "./output_*.wav"):
+        """
+        書き出されたファイルをマージ
+
+        Parameters
+        -----------
+        status:
+            generateの出力
+        path:
+            ファイルパス
+        """
+        wl = b""
+        with wave.open("merge.wav","w") as ow:
+            for i, bool in enumerate(status):
+                if bool == False:
+                    continue
+                with wave.open(path.replace("*", str(i)),"rb") as iw:
+                    ow.setnchannels(iw.getnchannels())
+                    ow.setsampwidth(iw.getsampwidth())
+                    ow.setframerate(iw.getframerate())
+                    wl += iw.readframes(iw.getnframes())
+                remove(path.replace("*", str(i)))
+            ow.writeframes(wl)
+        return "正常に完了しました"
+
     def generate(self,text:list = "", path:str = "./output_*.wav"):
         """
         wav書き出し
@@ -57,8 +86,8 @@ class CeVIOai:
         return_text = []
         text = self._list_check(text)
         for speak in text:
-            #200文字以上は自動分割
-            if len(speak) >= 200:
+            #500文字以上は自動分割
+            if len(speak) >= 500:
                 return_text += self.generate(self.split_speak_text(speak), path)
                 continue
             if "*" in path:
@@ -83,8 +112,8 @@ class CeVIOai:
         speak_text = self._list_check(text)
         #読み上げ
         for speak in speak_text:
-            #200文字以上は自動分割
-            if len(speak) >= 200:
+            #500文字以上は自動分割
+            if len(speak) >= 500:
                 return_text += self.speak(self.split_speak_text(speak))
                 continue
             status = self.__talker.Speak(speak)
@@ -114,7 +143,7 @@ class CeVIOai:
         return_text = []
         temp = sp(pattern, text)
         for i in temp:
-            if len(i) == 200:
+            if len(i) == 500:
                 return ["切り分けられませんでした"]
             elif len(i) == 0:
                 continue
