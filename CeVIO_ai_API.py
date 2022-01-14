@@ -53,12 +53,18 @@ class CeVIOai:
         """
         wav書き出し
         """
+        self.__i = 0
         return_text = []
         text = self._list_check(text)
-        for i, speak in enumerate(text):
+        for speak in text:
+            #200文字以上は自動分割
+            if len(speak) >= 200:
+                return_text += self.generate(self.split_speak_text(speak), path)
+                continue
             if "*" in path:
-                temp = path.replace("*", i)
+                temp = path.replace("*", str(self.__i))
             return_text.append(self.__talker.OutputWaveToFile(speak,temp))
+            self.__i += 1
         return return_text
 
     def speak(self,text:list, wait_time:float = -1):
@@ -266,18 +272,30 @@ class CeVIOai:
     #     return return_text
 
     def get_tone(self) -> int:
+        """
+        現在の高さを取得
+        """
         return self.__talker.Tone
 
     def get_speed(self) -> int:
+        """
+        現在の速度を取得
+        """
         return self.__talker.Speed
 
     # def get_tonescale(self) -> int:
     #     return self.__talker.LogF0Scale
 
     def get_alpha(self) -> int:
+        """
+        現在の声質を取得
+        """
         return self.__talker.Alpha
 
     def get_volume(self) -> int:
+        """
+        現在の音量を取得
+        """
         return self.__talker.Volume
 
     def get_text_duration(self,text:str) -> float:
