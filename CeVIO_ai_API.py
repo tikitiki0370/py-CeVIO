@@ -74,7 +74,7 @@ class CeVIOai:
         """
         return_text = []
         #リストに変更
-        speak_text = self._check_list(text)
+        speak_text = self._list_check(text)
         #読み上げ
         for speak in speak_text:
             #200文字以上は自動分割
