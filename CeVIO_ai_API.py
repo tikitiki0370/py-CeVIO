@@ -1,8 +1,8 @@
 from re import split as sp
+from typing import AnyStr
 
 import win32com.client
 
-from tests import split_speak_text
 
 
 class StartupError(Exception):
@@ -40,12 +40,27 @@ class CeVIOai:
         self.__talker.Cast = CeVIOai.__talker_name[0]
         self.__talker.Volume = 50
 
+    def _list_check(self, text:str):
+        #list以外を変換
+        list_text = []
+        if type(text) != list:
+            list_text.append(str(text))
+        else:
+            list_text += text
+        return list_text
 
-    def generate(self,text:str = "", path:str = "./output.wav"):
+
+    def generate(self,text:list = "", path:str = "./output_*.wav"):
         """
         wav書き出し
         """
-        return self.__talker.OutputWaveToFile(text,path)
+        return_text = []
+        text = self._list_check(text)
+        for i, speak in enumerate(text):
+            if "*" in path:
+                temp = path.replace("*", i)
+            return_text.append(self.__talker.OutputWaveToFile(speak,temp))
+        return return_text
 
     def speak(self,text:list, wait_time:float = -1):
         """
@@ -58,18 +73,14 @@ class CeVIOai:
         wait_time:
             再生終了までの最大待機時間
         """
-        speak_text = []
         return_text = []
-
-        #list以外を変換
-        if type(text) != list:
-            speak_text.append(str(text))
-        else:
-            speak_text += text
+        #リストに変更
+        speak_text = self._check_list(text)
         #読み上げ
         for speak in speak_text:
+            #200文字以上は自動分割
             if len(speak) >= 200:
-                return_text += self.speak(split_speak_text(speak))
+                return_text += self.speak(self.split_speak_text(speak))
                 continue
             status = self.__talker.Speak(speak)
             status.Wait_2(wait_time)
