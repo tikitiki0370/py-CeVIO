@@ -1,5 +1,4 @@
 from re import split as sp
-from typing import AnyStr
 
 import win32com.client
 
@@ -332,15 +331,7 @@ class CeVIOai:
 
 
 if __name__ == "__main__":
-    #引用(https://www.ah-soft.com/rikka/)
-    test_meg = """
-「CeVIO AI 小春六花 トークボイス」は、声優「青山吉能」の声を元に制作した、明るく元気な声が特徴で、喜怒哀楽の表現も可能な入力文字読み上げソフトです。
-最新のAI技術により人間の声質や癖、しゃべり方を高精度に再現します。
-あなたのお好みの文章や言葉をテキストで入力するだけで、簡単に読み上げさせることができます。
-また、他のCeVIO AI トークボイス製品をお持ちの場合、セリフ毎にキャスト(話者)を切り替えて対話のように喋らせることも可能です。"""
+    test_meg = "これはテストメッセージです"
     test = CeVIOai()
-    print(test.get_emotion_value())
+    print(test.get_emotion)
     print(test.speak(test_meg))
-
-    test.change_emotion({"嬉しい": 0,"落ち着き":0})
-    print(test.get_emotion_value())
