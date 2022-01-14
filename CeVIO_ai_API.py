@@ -208,15 +208,15 @@ class CeVIOai:
         else:
             return "値が不正です"
 
-    def set_tonescale(self, value:int = 50):
-        """
-        抑揚を設定
-        """
-        if value <= 100 and value >=0:
-            self.__talker.ToneScale = value
-            return f"{value}に変更されました" if value == 50 else "リセットされました"
-        else:
-            return "値が不正です"
+    # def set_tonescale(self, value:int = 50):
+    #     """
+    #     抑揚を設定
+    #     """
+    #     if value <= 100 and value >=0:
+    #         self.__talker.ToneScale = value
+    #         return f"{value}に変更されました" if value == 50 else "リセットされました"
+    #     else:
+    #         return "値が不正です"
 
     def set_alpha(self, value:int = 50):
         """
@@ -261,10 +261,9 @@ class CeVIOai:
         except: pass
 
 
-    def get_parameters(self) -> list:
-        return_text = list(self.get_cast(),self.get_tone(), 
-                        self.get_speed(), self.get_tonescale(), self.get_volume())
-        return return_text
+    # def get_parameters(self) -> list:
+    #     return_text = 
+    #     return return_text
 
     def get_tone(self) -> int:
         return self.__talker.Tone
@@ -272,8 +271,8 @@ class CeVIOai:
     def get_speed(self) -> int:
         return self.__talker.Speed
 
-    def get_tonescale(self) -> int:
-        return self.__talker.Tonescale
+    # def get_tonescale(self) -> int:
+    #     return self.__talker.LogF0Scale
 
     def get_alpha(self) -> int:
         return self.__talker.Alpha
