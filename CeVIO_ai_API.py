@@ -110,7 +110,7 @@ class CeVIOai:
         temp = sp(pattern, text)
         for i in temp:
             if len(i) == 200:
-                return "切り分けられませんでした"
+                return ["切り分けられませんでした"]
             elif len(i) == 0:
                 continue
             return_text.append(i)
@@ -225,7 +225,7 @@ class CeVIOai:
         """
         if value <=100 and value >=0:
             self.__talker.Alpha = value
-            return f"{value}変更されました" if value == 50 else "リセットされました"
+            return f"{value}に変更されました" if value == 50 else "リセットされました"
         else:
             return "値が不正です"
 
@@ -261,6 +261,26 @@ class CeVIOai:
         try:self.__talker.Cast = temp
         except: pass
 
+
+    def get_parameters(self) -> list:
+        return_text = list(self.get_cast(),self.get_tone(), 
+                        self.get_speed(), self.get_tonescale(), self.get_volume())
+        return return_text
+
+    def get_tone(self) -> int:
+        return self.__talker.Tone
+
+    def get_speed(self) -> int:
+        return self.__talker.Speed
+
+    def get_tonescale(self) -> int:
+        return self.__talker.Tonescale
+
+    def get_alpha(self) -> int:
+        return self.__talker.Alpha
+
+    def get_volume(self) -> int:
+        return self.__talker.Volume
 
     def get_text_duration(self,text:str) -> float:
         """
@@ -313,7 +333,8 @@ class CeVIOai:
 
 if __name__ == "__main__":
     #引用(https://www.ah-soft.com/rikka/)
-    test_meg = """「CeVIO AI 小春六花 トークボイス」は、声優「青山吉能」の声を元に制作した、明るく元気な声が特徴で、喜怒哀楽の表現も可能な入力文字読み上げソフトです。
+    test_meg = """
+「CeVIO AI 小春六花 トークボイス」は、声優「青山吉能」の声を元に制作した、明るく元気な声が特徴で、喜怒哀楽の表現も可能な入力文字読み上げソフトです。
 最新のAI技術により人間の声質や癖、しゃべり方を高精度に再現します。
 あなたのお好みの文章や言葉をテキストで入力するだけで、簡単に読み上げさせることができます。
 また、他のCeVIO AI トークボイス製品をお持ちの場合、セリフ毎にキャスト(話者)を切り替えて対話のように喋らせることも可能です。"""
