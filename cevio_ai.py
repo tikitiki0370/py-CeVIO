@@ -81,7 +81,9 @@ class CeVIOai:
         """
         self.__i = 0
         return_text = []
+        #リストに変更
         text = self._list_check(text)
+        #書き出し
         for speak in text:
             #500文字以上は自動分割
             if len(speak) >= 500:
@@ -193,7 +195,7 @@ class CeVIOai:
     def set_emotion(self, value:str):
         """
         感情パラメータの変更
-        選択した感情の値を100にし、他のパラメータを0にします
+        選択した感情の値を100にし、他のパラメータを0にする
 
         Parameters
         ----------
