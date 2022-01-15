@@ -1,11 +1,8 @@
-from operator import imod
-from re import split as sp
-from os import remove
-
 import wave
+from os import remove
+from re import split as sp
 
 import win32com.client
-
 
 
 class StartupError(Exception):
