@@ -32,7 +32,7 @@ class CeVIOboth:
             CeVIOboth.service = win32com.client.Dispatch("CeVIO.Talk.RemoteService.ServiceControl")
         service_status = CeVIOboth.service.StartHost(False)
         if service_status < 0:
-            raise StartupError(service_status)
+            raise StartupError(service_status, "CS")
 
         #CeVIO_CS起動API
         if not CeVIOboth.service:
@@ -57,11 +57,45 @@ class CeVIOboth:
             if not CeVIOboth.__talker_ai.Cast:
                 CeVIOboth.__talker_ai.Cast = CeVIOboth.__talker_name[0]
                 CeVIOboth.__talker_ai.Volume = 50
-
-        #初期設定
             if not CeVIOboth.__talker_cs.Cast:
                 CeVIOboth.__talker_cs.Cast = CeVIOboth.__talker_name[0]
                 CeVIOboth.__talker_cs.Volume = 50
+
+    def get_talker(self):
+        #話し手一覧を取得
+        CeVIOboth.__talker_name_ai = [CeVIOboth.__talker_ai.AvailableCasts.At(i) for i in range(CeVIOboth.__talker_ai.__talker.AvailableCasts.Length)]
+        CeVIOboth.__talker_name_cs = [CeVIOboth.__talker_cs.AvailableCasts.At(i) for i in range(CeVIOboth.__talker_cs.__talker.AvailableCasts.Length)]
+        # #現在の話し手を保存
+        # try:temp = self.__talker.Cast
+        # except: pass
+
+        #話し手を変更し全員の感情値を取得
+        emotion_ai = []
+        emotion_cs = []
+        for i in CeVIOboth.__talker_name_ai:
+            CeVIOboth.__talker_ai.Cast = i
+            emotion_ai[i] = [CeVIOboth.__talker_ai.Components.At(i).Name for i in range(CeVIOboth.__talker_ai.Components.Length)]
+
+        for i in CeVIOboth.__talker_name_cs:
+            CeVIOboth.__talker_cs.Cast = i
+            emotion_cs[i] = [CeVIOboth.__talker_cs.Components.At(i).Name for i in range(CeVIOboth.__talker_cs.Components.Length)]
+
+        for i in emotion_cs:
+            if i in emotion_ai:
+                idx = emotion_ai.index(i)
+                emotion_ai.pop(idx)
+                emotion_ai.insert(idx, f"{i}_ai")
+
+                idx = emotion_cs.index(i)
+                emotion_ai.pop(idx)
+                emotion_cs.insert(idx, f"{i}_cs")
+
+
+        # #元の話し手の復元
+        # try:self.__talker.Cast = temp
+        # except: pass
+
+        pass
 
 
     def speak(self,text:list, wait_time:float = -1):
