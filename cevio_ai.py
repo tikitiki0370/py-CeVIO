@@ -228,7 +228,7 @@ class CeVIOai:
         """
         if value <=100 and value >=0:
             self.__talker.Tone = value 
-            return f"{value}変更されました" if value == 50 else "リセットされました"
+            return f"{value}変更されました" if value != 50 else "リセットされました"
         else:
             return "値が不正です"
 
@@ -238,7 +238,7 @@ class CeVIOai:
         """
         if value <= 100 and value >=0:
             self.__talker.Speed = value
-            return f"{value}変更されました" if value == 50 else "リセットされました"
+            return f"{value}変更されました" if value != 50 else "リセットされました"
         else:
             return "値が不正です"
 
@@ -248,7 +248,7 @@ class CeVIOai:
     #     """
     #     if value <= 100 and value >=0:
     #         self.__talker.ToneScale = value
-    #         return f"{value}に変更されました" if value == 50 else "リセットされました"
+    #         return f"{value}に変更されました" if value != 50 else "リセットされました"
     #     else:
     #         return "値が不正です"
 
@@ -258,7 +258,7 @@ class CeVIOai:
         """
         if value <=100 and value >=0:
             self.__talker.Alpha = value
-            return f"{value}に変更されました" if value == 50 else "リセットされました"
+            return f"{value}に変更されました" if value != 50 else "リセットされました"
         else:
             return "値が不正です"
 
@@ -268,7 +268,7 @@ class CeVIOai:
         """
         if value <=100 and value >=0:
             self.__talker.Volume = value
-            return f"{value}変更されました" if value == 50 else "リセットされました"
+            return f"{value}変更されました" if value != 50 else "リセットされました"
         else:
             return "値が不正です"
 
