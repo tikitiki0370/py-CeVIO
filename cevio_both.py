@@ -22,16 +22,16 @@ class CeVIOboth:
     def __init__(self):
 
         #CeVIO_AI起動API
-        if not CeVIOboth.service:
-            CeVIOboth.service = win32com.client.Dispatch("CeVIO.Talk.RemoteService2.ServiceControl2")
-        service_status = CeVIOboth.service.StartHost(False)
+        if not CeVIOboth.service_ai:
+            CeVIOboth.service_ai = win32com.client.Dispatch("CeVIO.Talk.RemoteService2.ServiceControl2")
+        service_status = CeVIOboth.service_ai.StartHost(False)
         if service_status < 0:
             raise StartupError(service_status, "AI")
 
         #CeVIO_CS起動API
         if not CeVIOboth.service:
-            CeVIOboth.service = win32com.client.Dispatch("CeVIO.Talk.RemoteService.ServiceControl")
-        service_status = CeVIOboth.service.StartHost(False)
+            CeVIOboth.service_cs = win32com.client.Dispatch("CeVIO.Talk.RemoteService.ServiceControl")
+        service_status = CeVIOboth.service_cs.StartHost(False)
         if service_status < 0:
             raise StartupError(service_status, "CS")
 
