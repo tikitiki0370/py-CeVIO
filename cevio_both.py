@@ -14,7 +14,8 @@ class StartupError(Exception):
         return (f"CeVIO_{self.name}の起動に失敗しました:{self.error_text[self.error_number]}")
 
 class CeVIOboth:
-    service = None
+    service_ai = None
+    service_cs = None
     __talker_ai = None
     __talker_cs = None
     __talker_name_ai = ["小春六花"]
