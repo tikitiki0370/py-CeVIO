@@ -30,7 +30,7 @@ class CeVIOboth:
             raise StartupError(service_status, "AI")
 
         #CeVIO_CS起動API
-        if not CeVIOboth.service:
+        if not CeVIOboth.service_cs:
             CeVIOboth.service_cs = win32com.client.Dispatch("CeVIO.Talk.RemoteService.ServiceControl")
         service_status = CeVIOboth.service_cs.StartHost(False)
         if service_status < 0:
