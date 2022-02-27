@@ -82,9 +82,6 @@ class CeVIOboth:
 
         for i in emotion_cs:
             if i in emotion_ai:
-                idx = emotion_ai.index(i)
-                emotion_ai.pop(idx)
-                emotion_ai.insert(idx, f"{i}_ai")
 
                 idx = emotion_cs.index(i)
                 emotion_ai.pop(idx)
