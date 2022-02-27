@@ -28,12 +28,6 @@ class CeVIOboth:
         if service_status < 0:
             raise StartupError(service_status, "AI")
 
-        if not CeVIOboth.service:
-            CeVIOboth.service = win32com.client.Dispatch("CeVIO.Talk.RemoteService.ServiceControl")
-        service_status = CeVIOboth.service.StartHost(False)
-        if service_status < 0:
-            raise StartupError(service_status, "CS")
-
         #CeVIO_CS起動API
         if not CeVIOboth.service:
             CeVIOboth.service = win32com.client.Dispatch("CeVIO.Talk.RemoteService.ServiceControl")
@@ -47,7 +41,7 @@ class CeVIOboth:
 
         #CS_API接続
         if not CeVIOboth.__talker_cs:
-            CeVIOboth.__talker_cs = win32com.client.Dispatch("CeVIO.Talk.RemoteService2.Talker2")
+            CeVIOboth.__talker_cs = win32com.client.Dispatch("CeVIO.Talk.RemoteService.Talker")
 
         # #話し手取得
         # if not CeVIOboth.__talker_name:
@@ -55,10 +49,10 @@ class CeVIOboth:
 
         #初期設定
             if not CeVIOboth.__talker_ai.Cast:
-                CeVIOboth.__talker_ai.Cast = CeVIOboth.__talker_name[0]
+                CeVIOboth.__talker_ai.Cast = CeVIOboth.__talker_name_ai[0]
                 CeVIOboth.__talker_ai.Volume = 50
             if not CeVIOboth.__talker_cs.Cast:
-                CeVIOboth.__talker_cs.Cast = CeVIOboth.__talker_name[0]
+                CeVIOboth.__talker_cs.Cast = CeVIOboth.__talker_name_cs[0]
                 CeVIOboth.__talker_cs.Volume = 50
 
     def get_talker(self):
