@@ -50,7 +50,7 @@ class CeVIOai:
         return list_text
 
 
-    def wav_merge(self, status:list, path:str = "./output_*.wav"):
+    def wav_merge(self, status:list, path:str = "./output_*.wav", name = "merge.wav"):
         """
         書き出されたファイルをマージ
 
@@ -62,7 +62,7 @@ class CeVIOai:
             ファイルパス
         """
         wl = b""
-        with wave.open("merge.wav","w") as ow:
+        with wave.open(name ,"w") as ow:
             for i, bool in enumerate(status):
                 if bool == False:
                     continue
@@ -226,7 +226,7 @@ class CeVIOai:
         """
         声の高さを設定
         """
-        if value <=100 and value >=0:
+        if value <= 100 >= 0:
             self.__talker.Tone = value 
             return f"{value}変更されました" if value != 50 else "リセットされました"
         else:
@@ -236,7 +236,7 @@ class CeVIOai:
         """
         読み上げ速度を設定
         """
-        if value <= 100 and value >=0:
+        if value <= 100 >=0:
             self.__talker.Speed = value
             return f"{value}変更されました" if value != 50 else "リセットされました"
         else:
@@ -256,7 +256,7 @@ class CeVIOai:
         """
         声質を設定
         """
-        if value <=100 and value >=0:
+        if value <= 100 >= 0:
             self.__talker.Alpha = value
             return f"{value}に変更されました" if value != 50 else "リセットされました"
         else:
@@ -266,7 +266,7 @@ class CeVIOai:
         """
         音量を設定
         """
-        if value <=100 and value >=0:
+        if value <= 100 >= 0:
             self.__talker.Volume = value
             return f"{value}変更されました" if value != 50 else "リセットされました"
         else:
